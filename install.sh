@@ -8,7 +8,8 @@ apt install clang \
 	git \
 	wget \
 	python3 \
-	zsh -y
+	lazygit \
+	ripgrep -y
 
 apt install cmake pkg-config libfreetype6-dev libfontconfig1-dev libxcb-xfixes0-dev libxkbcommon-dev python3 -y
 
@@ -19,18 +20,12 @@ curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo 
 	sudo apt update &&
 	sudo apt install gh -y
 
-echo "Set up ZSH"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-apt install fd-find fzf -y
-cp $HOME/config/.zshrc $HOME
-
 echo "Set up cargo"
 curl https://sh.rustup.rs -sSf | sh
 
 echo "Set up Go"
 curl https://go.dev/dl/go1.21.6.linux-amd64.tar.gz --output go.tar.gz
 tar -C /usr/local -xzf go.tar.gz
-echo "export PATH=$PATH:/usr/local/go/bin" >>$HOME/.zshrc
 
 echo "Set up node"
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -45,8 +40,10 @@ source $HOME/.zshrc
 sdk install gradle
 sdk install java 14.0.2-open
 curl https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz --output maven.tar.gz
-echo "export PATH=$PATH:$HOME/apache-maven-3.9.6/bin/" >>$HOME/.zshrc
 rm -rf maven.tar.gz
+mkdir $HOME/.gradle $HOME/.m2
+touch $HOME/.gradle/gradle.properties
+touch $HOME/.m2/settings.xml
 
 echo "Install alacritty"
 git clone https://github.com/alacritty/alacritty/
@@ -72,6 +69,14 @@ echo "Set up tmux"
 apt install tmux -y
 cp -rf $HOME/config/tmux $HOME/.config/
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+echo "Set up ZSH"
+apt install zsh -y
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+apt install fd-find fzf -y
+cp $HOME/config/.zshrc $HOME
+echo "export PATH=$PATH:/usr/local/go/bin" >>$HOME/.zshrc
+echo "export PATH=$PATH:$HOME/apache-maven-3.9.6/bin/" >>$HOME/.zshrc
 
 git config --global user.email "alexandre.erard@ubleam.com"
 git config --global user.name "Alexandre Erard"
